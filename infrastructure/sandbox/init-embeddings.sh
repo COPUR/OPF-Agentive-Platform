@@ -2,6 +2,8 @@
 # init-embeddings.sh
 # Initializes the pgvector semantic cache with dummy mock data for the Sandbox.
 
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+
 echo "Waiting for postgres-vector to be ready..."
 sleep 10
 

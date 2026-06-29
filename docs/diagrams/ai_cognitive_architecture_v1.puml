@@ -4,6 +4,14 @@ skinparam node {
     BorderColor #a2b4c6
 }
 
+actor "LLM / AI Agent" as Agent
+actor "TPP App" as App
+
+node "External Interface" {
+    [Nebras MCP Server] <<Tool Exposer>>
+    [API Gateway] <<DPoP Validator>>
+}
+
 node "Agentive Platform (OpenShift)" {
     
     component "Agent Gateway\n(Spring Cloud Gateway)" as gateway

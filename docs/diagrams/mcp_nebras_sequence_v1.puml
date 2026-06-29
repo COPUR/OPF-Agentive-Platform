@@ -1,0 +1,35 @@
+@startuml MCP_Nebras_Sequence
+skinparam ParticipantPadding 20
+skinparam BoxPadding 10
+
+actor "LLM / AI Agent\n(e.g., Claude)" as Agent
+box "Nebras MCP Module" #LightCyan
+participant "MCP Server" as MCP
+end box
+
+box "Agentive Platform" #LightGoldenRodYellow
+participant "API Gateway" as Gateway
+participant "Cognitive Orchestrator" as Cog
+end box
+
+== 1. Tool Discovery ==
+Agent -> MCP : ListToolsRequest
+MCP --> Agent : Returns Tools:\n- nebras_initiate_consent\n- nebras_execute_salary_batch\n- nebras_execute_car_lease
+
+== 2. Consent Flow Execution ==
+Agent -> MCP : CallTool(nebras_initiate_consent, {scope: DOMESTIC_PAYMENT})
+MCP --> Agent : Returns UAE Pass URL & Consent ID
+
+== 3. Payment Execution ==
+Agent -> MCP : CallTool(nebras_execute_salary_batch, {amount: 250000})
+note over MCP : MCP Maps to Open Finance JSON Intent
+MCP -> Gateway : POST /domestic-payments\n(Encrypted payload)
+Gateway -> Cog : Route to Temporal Workflow
+Cog --> Gateway : Intent ID
+Gateway --> MCP : Intent ID
+MCP --> Agent : Returns Success + Intent ID
+
+== 4. AI Context Awareness ==
+note over Agent : AI now knows the batch was submitted\nand can continue its autonomous reasoning.
+
+@enduml

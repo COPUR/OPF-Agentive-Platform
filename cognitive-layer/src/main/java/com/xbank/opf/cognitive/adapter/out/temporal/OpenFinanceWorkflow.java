@@ -1,4 +1,4 @@
-package com.xbank.opf.cognitive.workflow;
+package com.xbank.opf.cognitive.adapter.out.temporal;
 
 import io.temporal.workflow.WorkflowInterface;
 import io.temporal.workflow.WorkflowMethod;

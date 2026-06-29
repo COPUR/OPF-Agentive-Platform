@@ -1,0 +1,35 @@
+@startuml Developer_Portal_Architecture
+skinparam ParticipantPadding 20
+skinparam BoxPadding 10
+
+actor "Third Party Provider" as TPP
+box "React SPA (frontend-x-bank-souq)" #LightBlue
+participant "UI Components" as UI
+participant "React Router" as Router
+end box
+
+box "Nebras Open Finance Core" #LightGoldenRodYellow
+participant "API Gateway" as Gateway
+participant "MCP Server" as MCP
+participant "Temporal Workflow" as Temporal
+end box
+
+TPP -> UI : View Dashboard
+UI -> Router : Navigate to /onboarding
+TPP -> UI : Submit Trade Docs
+UI -> Gateway : POST /api/tpp/onboard (multipart)
+Gateway -> Temporal : Start TPP Admission Agent
+Temporal --> UI : Polling Status (Processing)
+note over Temporal : Security LLM Scans Docs\nCircuit Breaker pauses if needed
+Temporal --> UI : Success (Keycloak Credentials provisioned)
+UI -> TPP : Displays Client ID & Secrets
+
+TPP -> UI : Download SDK
+UI -> Gateway : GET /sdk/java
+Gateway --> UI : opf-nebras-java-sdk.jar
+
+TPP -> UI : Download MCP Config
+UI -> MCP : GET /mcp/config
+MCP --> UI : claude_desktop_config.json
+
+@enduml

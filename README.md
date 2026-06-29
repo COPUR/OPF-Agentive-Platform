@@ -47,14 +47,24 @@ The repository is structured into distinct Maven modules, compiling down to a re
 ## Chapter 5: OpenShift Sandbox & Deployment
 To simulate the production environment locally without requiring AWS EKS, we utilize a full containerized Service Mesh.
 
+![Local Sandbox Topology](docs/diagrams/Deployment_Sandbox.svg)
+
 **To boot the environment:**
 1. `cd infrastructure/sandbox/`
 2. `./start-sandbox.sh`
 > *Note: This executes `oc apply` to deploy Keycloak, Temporal, Kafka, Redis, and a PostgreSQL `pgvector` database pre-seeded with dummy Open Finance semantic vectors, all wrapped in Istio Envoy sidecars.*
 
----
+## Chapter 6: TPP Admission & Developer Portal
+The Nebras platform requires rigorous background checks for Third Party Providers. This is managed by the React-based Developer Portal (`frontend-x-bank-souq`).
 
-## Chapter 6: Strategic Analysis & AI Productivity
+![Developer Portal Architecture](docs/diagrams/developer_portal_architecture_v1.svg)
+
+## Chapter 7: The AI Agent Interface (MCP Server)
+The platform natively exposes its Agentive workflows to external AI Agents (like Claude Desktop) via the **Model Context Protocol (MCP)**. This allows external LLMs to execute Salary Batches or Car Lease payments as simple "AI Tools".
+
+![MCP Nebras Sequence](docs/diagrams/mcp_nebras_sequence_v1.svg)
+
+## Chapter 8: Strategic Analysis & AI Productivity
 ### Strategic SWOT Analysis
 * **Strengths**: Absolute data sovereignty (local LLMs), high resilience (Temporal), and zero-trust security (Istio).
 * **Weaknesses**: High initial CapEx for GPU infrastructure and HBM bandwidth requirements.
@@ -66,7 +76,7 @@ We utilize background telemetry (`Agent5Dora`) to track the exact ratio of Human
 
 ---
 
-## Chapter 7: The Master Documentation Codex
+## Chapter 9: The Master Documentation Codex
 For an exhaustive dive into specific architectural constraints, refer to the following `_v1` baseline documents:
 
 | Document | Description | Link |

@@ -1,9 +1,9 @@
-package com.xbank.opf.cognitive.controller;
+package com.xbank.opf.cognitive.adapter.in.web;
 
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowOptions;
 import io.temporal.serviceclient.WorkflowServiceStubs;
-import com.xbank.opf.cognitive.workflow.OpenFinanceWorkflow;
+import com.xbank.opf.cognitive.adapter.out.temporal.OpenFinanceWorkflow;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;

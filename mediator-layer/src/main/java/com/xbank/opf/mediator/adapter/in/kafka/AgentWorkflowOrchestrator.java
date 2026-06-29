@@ -1,4 +1,4 @@
-package com.xbank.opf.mediator.agent;
+package com.xbank.opf.mediator.adapter.in.kafka;
 
 import org.springframework.stereotype.Service;
 import java.util.UUID;

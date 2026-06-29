@@ -1,0 +1,60 @@
+@startuml Nebras_SDK_Class_Diagram
+skinparam classAttributeIconSize 0
+
+package "com.xbank.opf.sdk" {
+
+  class NebrasClient {
+    - String clientId
+    - String privateKeyPem
+    - ApiTokenizationService tokenService
+    + executeSalaryBatch(SalaryBatchRequest) : String
+    + executeCarLeasePayment(CarLeaseLoanRequest) : String
+    - generateDpopProof() : String
+  }
+
+  class WorkflowWatcher {
+    + waitForCompletion(String intentId) : String
+  }
+}
+
+package "com.xbank.opf.sdk.security" {
+  class ConsentManager {
+    + initiateConsentFlow(String scope) : String
+    + checkConsentStatus(String consentId) : boolean
+  }
+
+  class ApiTokenizationService {
+    + exchangeConsentForToken(String consentId) : String
+    + refreshToken(String refreshToken) : String
+  }
+}
+
+package "com.xbank.opf.sdk.mapper" {
+  class NebrasIntentMapper {
+    {static} + mapToOpenFinanceIntent(SalaryBatchRequest) : String
+    {static} + mapToOpenFinanceIntent(CarLeaseLoanRequest) : String
+  }
+}
+
+package "com.xbank.opf.sdk.domain" {
+  class SalaryBatchRequest {
+    - String corporateAccountId
+    - int totalEmployees
+    - double totalAmount
+  }
+
+  class CarLeaseLoanRequest {
+    - String leaseContractId
+    - String customerAccountId
+    - double monthlyInstallment
+  }
+}
+
+NebrasClient --> NebrasIntentMapper : uses
+NebrasClient --> ApiTokenizationService : uses
+NebrasClient ..> SalaryBatchRequest : consumes
+NebrasClient ..> CarLeaseLoanRequest : consumes
+NebrasIntentMapper ..> SalaryBatchRequest : transforms
+NebrasIntentMapper ..> CarLeaseLoanRequest : transforms
+
+@enduml

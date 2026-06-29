@@ -1,0 +1,43 @@
+@startuml Nebras_SDK_Sequence_Diagram
+skinparam ParticipantPadding 20
+skinparam BoxPadding 10
+
+actor "Developer / App" as App
+box "Nebras Java SDK" #LightCyan
+participant "ConsentManager" as Consent
+participant "ApiTokenizationService" as Tokenizer
+participant "NebrasClient" as Client
+participant "NebrasIntentMapper" as Mapper
+participant "WorkflowWatcher" as Watcher
+end box
+
+box "Agentive Platform" #LightGoldenRodYellow
+participant "API Gateway" as Gateway
+end box
+
+== 1. Consent Management (SCA) ==
+App -> Consent : initiateConsentFlow("DOMESTIC_PAYMENT")
+Consent --> App : Redirect URL (https://auth.opf...)
+note over App : User authorizes payment\nvia UAE Pass / Mobile App
+App -> Consent : checkConsentStatus(consentId)
+Consent --> App : status = AUTHORIZED
+
+== 2. API Tokenization ==
+App -> Tokenizer : exchangeConsentForToken(consentId)
+Tokenizer --> App : api_token
+
+== 3. Payment Execution ==
+App -> Client : executeSalaryBatch(SalaryBatchRequest)
+Client -> Mapper : mapToOpenFinanceIntent(SalaryBatchRequest)
+Mapper --> Client : JSON Payload
+Client -> Client : generateDpopProof(privateKey)
+Client -> Gateway : POST /domestic-payments\nHeaders: [Authorization: Bearer api_token, DPoP: proof]
+Gateway --> Client : intentId
+Client --> App : intentId
+
+== 4. Agentive Polling ==
+App -> Watcher : waitForCompletion(intentId)
+note over Watcher : Polls status until\nTemporal Agents finish
+Watcher --> App : COMPLETED_SUCCESSFULLY
+
+@enduml

@@ -42,8 +42,21 @@ node "OpenShift Cluster" as k8s {
             component "Kafka Broker" as kafka
             e5 <-> kafka
         }
+        node "Pod: React Portal" {
+            component "Envoy Proxy\n<<Sidecar>>" as e6 #lightgrey
+            component "frontend-x-bank-souq" as portal
+            e6 <-> portal
+        }
+        
+        node "Pod: MCP Server" {
+            component "Envoy Proxy\n<<Sidecar>>" as e7 #lightgrey
+            component "opf-nebras-mcp-server" as mcp
+            e7 <-> mcp
+        }
     }
     
+    ingress --> e6 : /portal routing
+    ingress --> e7 : /mcp routing
     ingress --> e1 : /auth routing
     e1 --> e2 : Stores Party Data
     e3 --> e4 : Stores Workflow State

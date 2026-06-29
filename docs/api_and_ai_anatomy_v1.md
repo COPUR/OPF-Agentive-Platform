@@ -49,6 +49,12 @@ The Agentive platform is built on a "Sandwich" architecture, separating determin
   1. **Intent Extraction**: Model Cascade directs the query to either an SLM or massive LLM based on decision complexity.
   2. **Circuit Breaking (Graceful Degradation)**: If the foundational LLMs fail or hallucinate non-existent API parameters, the system gracefully falls back to deterministic rule-based algorithms rather than throwing fatal API errors.
 
+### PII Scrubbing
+If the LLM generates a response or requests a tool execution, it must be scrubbed before passing backward down the sandwich layer. The `DataSanitizer` module uses standard NLP parsing to strip remaining names or emails before the Agent returns a response.
+
+## Model Context Protocol (MCP) Integration
+The highest-level interface to our API Anatomy is the **MCP Server**. By wrapping our Open Finance tools (`nebras_initiate_consent`, `nebras_execute_salary_batch`) within the Model Context Protocol, we allow external LLM Agents (e.g., Claude) to interface directly with our Cognitive Layer without requiring manual API integration by third-party developers.
+
 ### 3.3 The Harness Layer (The "Guardrails")
 - **Security LLM (Streaming DLP)**: Before ANY user payload enters the foundational models, a specialized Security LLM interceptor acts as an Agent Gateway to inspect and block Prompt Injections.
 - **Data Obfuscator (Agent 3 Scoper)**: A strict Java interface that parses all outgoing prompts to the Model Layer and hashes PII (Account Numbers, EIDs) using SHA-256 before inference.

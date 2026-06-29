@@ -16,7 +16,7 @@ All AWS EKS configurations, MSK (Kafka) clusters, and PostgreSQL RDS instances a
 ## 4. Local Sandbox Environment (OpenShift/Istio)
 For local development, we maintain a complete OpenShift Sandbox ecosystem via CodeReady Containers (CRC) or a local K3s instance mapped to Istio. This ensures that the Zero-Trust mesh policies developed locally behave identically in AWS EKS.
 
-![Local Sandbox Topology](diagrams/deployment_sandbox_v1.svg)
+![Local Sandbox Topology](diagrams/Deployment_Sandbox.svg)
 
 **To spin up the sandbox:**
 1. Navigate to `infrastructure/sandbox/`

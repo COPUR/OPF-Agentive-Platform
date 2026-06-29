@@ -7,16 +7,24 @@ skinparam rectangle {
     BorderColor #0b4884
 }
 
-actor "Bank Customer" as customer
-actor "Developer / Fintech" as dev
+actor "Third Party Provider" as TPP
+actor "AI Agent (e.g., Claude)" as AIAgent
+actor "Customer" as Customer
 
-rectangle "OPF-Agentive-Platform\n<<Software System>>" as opf
-rectangle "Finacle Core Banking\n<<Legacy System>>" as finacle
-rectangle "FinOne\n<<Legacy System>>" as finone
+package "Nebras Open Finance Platform" {
+    component "MCP Server" as MCP
+    component "API Gateway" as Gateway
+    component "Cognitive Layer" as Cognitive
+    component "Mediator Layer" as Mediator
+    component "Identity & Access" as IAM
+    component "Anti-Corruption Layer" as ACL
+}
 
-customer --> opf : Uses Open Finance Apps
-dev --> opf : Integrates via API Portal
-opf --> finacle : Routes transactions & limits
-opf --> finone : Queries customer profiles
+component "Legacy Finacle/SOA" as Finacle
+
+TPP --> Gateway : SDK / API Calls
+AIAgent --> MCP : Tool Execution
+MCP --> Gateway : JSON Intent Payload
+Customer --> IAM : SCA Consent Approval
 
 @enduml

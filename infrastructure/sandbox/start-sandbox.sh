@@ -2,6 +2,7 @@
 # start-sandbox.sh
 # Bootstraps the local OPF Sandbox Environment
 
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
 echo "🚀 Starting OPF Agentive Platform Sandbox on OpenShift/Istio..."
 
 # Apply manifests

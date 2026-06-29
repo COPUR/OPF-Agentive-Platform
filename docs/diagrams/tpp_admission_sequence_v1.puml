@@ -1,0 +1,48 @@
+@startuml TPP_Admission_Sequence
+skinparam ParticipantPadding 20
+skinparam BoxPadding 10
+
+actor "Third Party Provider" as TPP
+box "API Souq (Frontend)" #LightCyan
+participant "Developer Portal" as Portal
+end box
+
+box "Backend Microservices" #LightGoldenRodYellow
+participant "Spring Cloud Gateway" as Gateway
+participant "Cognitive Layer\n(Temporal Workflow)" as Brain
+participant "Security LLM\n(DLP Filter)" as SecLLM
+participant "Identity Layer\n(Keycloak Mock)" as Keycloak
+end box
+
+actor "Bank Admin" as Admin
+
+TPP -> Portal : Submits Onboarding Application\n(Trade License, Regulatory ID)
+Portal -> Gateway : POST /souq/tpps/apply
+Gateway -> Brain : Initiates TppAdmissionWorkflow
+
+Brain -> SecLLM : Validate prompt & remove PII
+SecLLM --> Brain : Cleaned Payload
+
+note over Brain : Agent 1 evaluates compliance.\nAgent 2 runs Deep AML/KYC BGC.\nRisk Score generated.
+
+alt Risk Score > Threshold (Suspicious ID or BGC Fail)
+    Brain -> Admin : Flags application for manual review
+    note right : Workflow pauses indefinitely using Temporal's durable state
+    Admin -> Brain : Signals approval (adminReviewDecision)
+else Risk Score OK (Auto-Approve)
+    note over Brain : Automated Compliance & BGC Pass
+end
+
+note over Brain : Agent 3 dynamically generates\nUser Agreement Template
+Brain --> Portal : Return User Agreement
+TPP -> Portal : Cryptographically signs agreement
+Portal -> Brain : Signal: submitSignature(token)
+note right : Workflow resumes upon valid signature
+
+Brain -> Keycloak : Intent: Provision OAuth Client (POST /internal/keycloak/provision)
+Keycloak --> Brain : client_id, client_secret
+Brain --> Gateway : Admission Success
+Gateway --> Portal : Return API Credentials
+Portal --> TPP : Display Dashboard
+
+@enduml

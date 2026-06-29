@@ -9,6 +9,7 @@ actor "Developer" as dev
 rectangle "OPF-Agentive-Platform" {
     rectangle "Frontend Portal\n<<React/Vite>>" as portal
     rectangle "API Gateway\n<<Kong/Spring Cloud>>" as gateway
+    rectangle "MCP Server\n<<Node.js/TypeScript>>" as mcp
     rectangle "Identity & Access\n<<Keycloak + MongoDB>>" as idp
     rectangle "Cognitive Layer\n<<Temporal>>" as cog
     rectangle "Mediator Layer\n<<Spring Boot CQRS>>" as med
@@ -17,6 +18,7 @@ rectangle "OPF-Agentive-Platform" {
 
 dev --> portal : Browses APIs
 portal --> gateway : API calls
+mcp --> gateway : JSON-RPC calls
 gateway --> idp : Validates token
 gateway --> cog : Triggers workflows
 cog --> med : Executes Saga

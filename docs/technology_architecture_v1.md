@@ -10,14 +10,17 @@ This document outlines the concrete technology stack powering the Agentive Open 
 - **Strict Sandboxing**: Autonomous agents executing code are isolated in strict sandboxed environments (**WASM** or **gVisor**) to mitigate cyber risks; standard Docker boundaries are insufficient.
 - **The Kill Switch**: A deterministic hardware-level kill switch is wired to the Istio Mesh. Upon anomaly detection, it automatically revokes the agent's SPIFFE ID and scales the pod down to zero.
 
-## 2. Microservice Backbone
-- **Language/Framework**: Java 17+ running Spring Boot 3.x.
+## 2. Application Layer (Frontend & Backend)
+- **Developer Portal Frontend**: React 19, Vite, and Vanilla CSS with a Cyber-Corporate dark mode aesthetic (`frontend-x-bank-souq`).
+- **Gateway & API Management**: Spring Cloud Gateway, enabling reactive non-blocking I/O.
+- **Microservices Core**: Java 17+, Spring Boot 3.x.
 - **Dependency Management**: Maven.
 - **Security Scoping**: Custom Java components inject security policies during the build phase and hash PII before it reaches the AI models.
 
-## 3. Cognitive AI Framework
-- **Workflow Orchestrator**: Temporal SDK (Java). We rely on **Multi-Agent Workflows** instead of static state machines to manage agent intents and durable pausing.
-- **Model Cascades (Mixture of Experts)**: A compute-aware routing layer directs simple requests to ultra-fast Small Language Models (SLMs) before waking up foundational LLMs (e.g., Llama-3-70B), significantly optimizing HBM bandwidth.
+## 3. Cognitive & AI Integration
+- **Framework**: Model Context Protocol (MCP) SDK, LangChain4j, Temporal SDK.
+- **Models**: Local `vLLM` clusters for Security (DLP) and Llama-3-70b for Intent Analysis. Node.js MCP server exposes tools.
+- **Reasoning**: Temporal handles durable execution, allowing LLM inferences to fail, pause, or wait for Human-in-the-Loop review without breaking the process. simple requests to ultra-fast Small Language Models (SLMs) before waking up foundational LLMs (e.g., Llama-3-70B), significantly optimizing HBM bandwidth.
 - **Semantic Caching**: PostgreSQL extended with `pgvector` drastically reduces Time-to-First-Token (TTFT) by fetching identical intent embeddings directly from memory.
 
 ## 4. Mediator & Async Streaming
