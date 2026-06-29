@@ -20,7 +20,7 @@ This document outlines the concrete technology stack powering the Agentive Open 
 ## 3. Cognitive & AI Integration
 - **Framework**: Model Context Protocol (MCP) SDK, LangChain4j, Temporal SDK.
 - **Models**: Local `vLLM` clusters for Security (DLP) and Llama-3-70b for Intent Analysis. Node.js MCP server exposes tools.
-- **Reasoning**: Temporal handles durable execution, allowing LLM inferences to fail, pause, or wait for Human-in-the-Loop review without breaking the process. simple requests to ultra-fast Small Language Models (SLMs) before waking up foundational LLMs (e.g., Llama-3-70B), significantly optimizing HBM bandwidth.
+- **Reasoning & Agent Workflows**: Temporal handles durable execution (`TppAdmissionWorkflow`), allowing LLM inferences to fail, pause, or wait for Human-in-the-Loop review without breaking the process. Simple requests use ultra-fast Small Language Models (SLMs) before waking up foundational LLMs (e.g., Llama-3-70B), significantly optimizing HBM bandwidth. A `CognitiveCircuitBreaker` guards LLM calls with deterministic fallbacks when models are unresponsive.
 - **Semantic Caching**: PostgreSQL extended with `pgvector` drastically reduces Time-to-First-Token (TTFT) by fetching identical intent embeddings directly from memory.
 
 ## 4. Mediator & Async Streaming

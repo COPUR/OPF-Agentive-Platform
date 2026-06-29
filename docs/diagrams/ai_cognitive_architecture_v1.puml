@@ -22,11 +22,14 @@ node "Agentive Platform (OpenShift)" {
     }
     
     node "Cognitive Layer" {
+        component "Harness Orchestrator\n<<Task Parser>>" as harness
+        component "Agent Execution\n<<Iterative Loop>>" as execLoop
         component "Mixture of Experts Router" as router
         database "Semantic Cache\n<<pgvector>>" as cache
+        component "Cognitive Circuit Breaker" as cb #orange
         component "SLM (Fast Intent)" as slm #lightblue
         component "LLM (Deep Reasoning)" as llm #lightblue
-        component "Temporal Workflow" as temp
+        component "Temporal Workflow\n<<e.g. TPP Admission>>" as temp
     }
     
     node "Memory Banks" {
@@ -41,15 +44,20 @@ node "Agentive Platform (OpenShift)" {
 
 gateway --> dlp : Raw Request
 dlp --> scoper : Safe Request
-scoper --> router : Hashed Request
+scoper --> harness : Hashed Request
+harness --> execLoop : Structured Tasks
+execLoop --> router : Task Iteration
 router <--> cache : Check Intent
-router --> slm : Simple Task
-router --> llm : Complex Task
+router --> cb : Route Request
+cb --> slm : Simple Task
+cb --> llm : Complex Task
+cb --> temp : Fallback (Rules Engine)
 
 slm --> temp : Intent Execution
 llm --> temp : Intent Execution
 
-temp --> memory : Update State
+temp --> execLoop : Result/Signal
+execLoop --> memory : Update State
 killswitch ..> istio : Revokes SPIFFE ID
 
 @enduml

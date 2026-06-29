@@ -9,6 +9,8 @@ end box
 
 box "Backend Microservices" #LightGoldenRodYellow
 participant "Spring Cloud Gateway" as Gateway
+participant "Harness Orchestrator" as Harness
+participant "Cognitive Circuit Breaker" as CB
 participant "Cognitive Layer\n(Temporal Workflow)" as Brain
 participant "Security LLM\n(DLP Filter)" as SecLLM
 participant "Identity Layer\n(Keycloak Mock)" as Keycloak
@@ -18,10 +20,13 @@ actor "Bank Admin" as Admin
 
 TPP -> Portal : Submits Onboarding Application\n(Trade License, Regulatory ID)
 Portal -> Gateway : POST /souq/tpps/apply
-Gateway -> Brain : Initiates TppAdmissionWorkflow
+Gateway -> Harness : Forwards Request
+Harness -> SecLLM : Validate prompt & remove PII
+SecLLM --> Harness : Cleaned Payload
+Harness -> Brain : Initiates TppAdmissionWorkflow (Structured Task)
 
-Brain -> SecLLM : Validate prompt & remove PII
-SecLLM --> Brain : Cleaned Payload
+Brain -> CB : Request LLM evaluation
+CB -> Brain : LLM Response (or Fallback if down)
 
 note over Brain : Agent 1 evaluates compliance.\nAgent 2 runs Deep AML/KYC BGC.\nRisk Score generated.
 
