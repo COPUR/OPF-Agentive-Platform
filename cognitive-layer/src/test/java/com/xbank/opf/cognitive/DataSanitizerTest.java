@@ -3,16 +3,16 @@ package com.xbank.opf.cognitive;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.xbank.opf.cognitive.adapter.out.llm.Agent3Scoper;
+
 public class DataSanitizerTest {
 
     @Test
     public void testPiiScrubbing() {
-        // Assume Agent3Scoper is a conceptual static class for this test
+        Agent3Scoper scoper = new Agent3Scoper();
         String rawPrompt = "Transfer 100 AED from account 9934123 to EID 784-1234-5678901-2";
         
-        // Simulating the PII scrubbing logic
-        String scrubbedPrompt = rawPrompt.replaceAll("784-\\d{4}-\\d{7}-\\d", "[HASH_EID]")
-                                         .replaceAll("\\b\\d{7}\\b", "[HASH_ACCT]");
+        String scrubbedPrompt = scoper.scrubPii(rawPrompt);
                                          
         assertFalse(scrubbedPrompt.contains("9934123"));
         assertFalse(scrubbedPrompt.contains("784-1234-5678901-2"));

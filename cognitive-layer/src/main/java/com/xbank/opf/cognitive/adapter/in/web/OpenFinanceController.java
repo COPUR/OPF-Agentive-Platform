@@ -16,8 +16,19 @@ import java.util.UUID;
 @RequestMapping("/open-banking/v3.1")
 public class OpenFinanceController {
 
-    // Ideally injected via Spring Bean, initialized here for boilerplate simplicity
-    private final WorkflowClient workflowClient = WorkflowClient.newInstance(WorkflowServiceStubs.newLocalServiceStubs());
+    private WorkflowClient workflowClient;
+
+    public OpenFinanceController() {
+        try {
+            this.workflowClient = WorkflowClient.newInstance(WorkflowServiceStubs.newLocalServiceStubs());
+        } catch (Exception e) {
+            // Ignored if local Temporal isn't running during startup
+        }
+    }
+
+    public OpenFinanceController(WorkflowClient workflowClient) {
+        this.workflowClient = workflowClient;
+    }
 
     @GetMapping("/aisp/accounts")
     public Map<String, Object> getAccounts(@RequestHeader(value="Authorization", required=false) String authHeader) {
