@@ -1,0 +1,20 @@
+@startuml Sequence_Diagram
+actor Client
+participant "API Gateway" as GW
+participant "Keycloak IdP" as IDP
+participant "Cognitive Layer" as COG
+participant "Mediator (Saga)" as MED
+participant "Legacy Finacle" as LEGACY
+
+Client -> GW : GET /accounts/limits
+GW -> IDP : Validate DPoP & Token
+IDP --> GW : Token Valid
+GW -> COG : Route request (Agentive Analysis)
+COG -> MED : Trigger FetchSaga
+MED -> LEGACY : Fetch limits via ACL
+LEGACY --> MED : Return legacy XML
+MED -> MED : Transform XML to OpenFinance JSON
+MED --> COG : Success
+COG --> GW : Return JSON
+GW --> Client : 200 OK (OpenFinance JSON)
+@enduml

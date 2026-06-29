@@ -1,0 +1,19 @@
+@startuml C4_Component
+skinparam component {
+    BackgroundColor #85bbf0
+}
+
+package "Mediator Layer" {
+    component "Request Analyzer\n<<Agentive Controller>>" as req
+    component "Command Handler\n<<CQRS>>" as cmd
+    component "Saga Orchestrator\n<<State Manager>>" as saga
+    component "Transactional Outbox\n<<Kafka Publisher>>" as outbox
+}
+
+database "Silver Copy DB\n<<PostgreSQL>>" as db
+
+req --> cmd : Routes parsed intent
+cmd --> saga : Initiates transaction
+saga --> db : Persists state
+saga --> outbox : Queues compensation/commit
+@enduml

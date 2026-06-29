@@ -1,0 +1,47 @@
+@startuml AI_Cognitive_Architecture
+skinparam node {
+    BackgroundColor #f4f6f8
+    BorderColor #a2b4c6
+}
+
+node "Agentive Platform (OpenShift)" {
+    
+    component "Agent Gateway\n(Spring Cloud Gateway)" as gateway
+    
+    node "Harness Layer" {
+        component "Security LLM\n<<Streaming DLP>>" as dlp #lightcoral
+        component "Agent Scoper\n<<PII Hashing>>" as scoper #lightyellow
+    }
+    
+    node "Cognitive Layer" {
+        component "Mixture of Experts Router" as router
+        database "Semantic Cache\n<<pgvector>>" as cache
+        component "SLM (Fast Intent)" as slm #lightblue
+        component "LLM (Deep Reasoning)" as llm #lightblue
+        component "Temporal Workflow" as temp
+    }
+    
+    node "Memory Banks" {
+        database "Agent State DB" as memory
+    }
+    
+    node "Security Fabric" {
+        component "Istio Mesh" as istio
+        component "Hardware Kill Switch" as killswitch #red
+    }
+}
+
+gateway --> dlp : Raw Request
+dlp --> scoper : Safe Request
+scoper --> router : Hashed Request
+router <--> cache : Check Intent
+router --> slm : Simple Task
+router --> llm : Complex Task
+
+slm --> temp : Intent Execution
+llm --> temp : Intent Execution
+
+temp --> memory : Update State
+killswitch ..> istio : Revokes SPIFFE ID
+
+@enduml

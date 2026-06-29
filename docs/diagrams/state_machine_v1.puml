@@ -1,0 +1,10 @@
+@startuml State_Machine
+[*] --> Pending
+
+Pending --> Executing : Start Saga
+Executing --> Committed : All Legacy APIs Success
+Executing --> Rollback_Initiated : Legacy API Failure
+Rollback_Initiated --> Compensated : Compensation Events Processed
+Committed --> [*]
+Compensated --> [*]
+@enduml

@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:23.0.7
+    command: start-dev
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      # Note: Keycloak natively uses Postgres for its own state. 
+      # MongoDB is used separately by the party-data-service for SCA/Profiles.
+    ports:
+      - "8080:8080"
+    networks:
+      - opf-network
+
+  mongodb:
+    image: mongo:6.0
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: partydata
+    ports:
+      - "27017:27017"
+    networks:
+      - opf-network
+
+networks:
+  opf-network:
+    driver: bridge

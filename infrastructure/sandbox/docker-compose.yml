@@ -1,0 +1,103 @@
+version: '3.8'
+
+services:
+  # --- Storage & AI Layer ---
+  postgres-vector:
+    image: ankane/pgvector:v0.5.1
+    environment:
+      POSTGRES_USER: opfuser
+      POSTGRES_PASSWORD: opfpassword
+      POSTGRES_DB: semantic_cache
+    ports:
+      - "5432:5432"
+    networks:
+      - sandbox-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U opfuser -d semantic_cache"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis-cache:
+    image: redis:7.0-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - sandbox-net
+
+  # --- Mediator Layer (Kafka) ---
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    networks:
+      - sandbox-net
+
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "9092:9092"
+    networks:
+      - sandbox-net
+
+  # --- Cognitive Layer (Temporal) ---
+  temporal:
+    image: temporalio/auto-setup:1.22.3
+    environment:
+      - DB=postgresql
+      - DB_PORT=5432
+      - POSTGRES_USER=opfuser
+      - POSTGRES_PWD=opfpassword
+      - POSTGRES_SEEDS=postgres-vector
+    ports:
+      - "7233:7233"
+    networks:
+      - sandbox-net
+    depends_on:
+      postgres-vector:
+        condition: service_healthy
+
+  temporal-ui:
+    image: temporalio/ui:2.21.3
+    environment:
+      - TEMPORAL_ADDRESS=temporal:7233
+      - TEMPORAL_CORS_ORIGINS=http://localhost:3000
+    ports:
+      - "8080:8080"
+    networks:
+      - sandbox-net
+    depends_on:
+      - temporal
+
+  # --- Identity Layer ---
+  mongodb:
+    image: mongo:6.0
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: partydata
+    ports:
+      - "27017:27017"
+    networks:
+      - sandbox-net
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:23.0.7
+    command: start-dev
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8081:8080"
+    networks:
+      - sandbox-net
+
+networks:
+  sandbox-net:
+    driver: bridge
