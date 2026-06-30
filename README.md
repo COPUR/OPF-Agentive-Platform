@@ -9,7 +9,7 @@ The financial sector is bounded by legacy mainframe limitations. This platform a
 
 Rather than relying on static APIs and brittle state machines, this platform utilizes **Autonomous AI Agents** orchestrated via Temporal to deterministically analyze, route, and execute Open Finance intents, all while maintaining absolute Data Sovereignty.
 
-![Platform Context](docs/diagrams/C4_Context.svg)
+![Platform Context](docs/diagrams/rendered/C4_Context_v2.svg)
 
 ---
 
@@ -21,7 +21,7 @@ Traditional stateless microservices are insufficient for long-running AI workflo
 4. **Memory Banks**: Stateful PostgreSQL "Silver Copies" act as an asynchronous buffer against the fragile legacy mainframe.
 5. **The Deterministic Kill Switch**: Hardwired into the Istio Service Mesh. If an anomaly is detected, the agent's SPIFFE ID is revoked and the Temporal pod is instantly scaled to zero.
 
-![Cognitive Architecture](docs/diagrams/AI_Cognitive_Architecture.svg)
+![Cognitive Architecture](docs/diagrams/rendered/AI_Cognitive_Architecture_v2.svg)
 
 ---
 
@@ -35,7 +35,7 @@ Our AI stack utilizes the "Sandwich Pattern", physically separating stochastic r
 
 ## Chapter 4: Implementation Tiers (The Codebase)
 The repository is structured into distinct Maven modules, compiling down to a resilient Spring Boot 3.x backend:
-* **`api-gateway/`**: Spring Cloud Gateway enforcing DPoP and JWT auth.
+* **Kong Gateway**: Replaced legacy Spring Gateway with Kong API Gateway (North-South) & Kong AI Gateway (Mesh).
 * **`cognitive-layer/`**: Houses the Temporal `OpenFinanceWorkflow` and `OpenFinanceController` REST entry points.
 * **`mediator-layer/`**: The `AgentWorkflowOrchestrator` implements CQRS and Event Sourcing via Kafka Outbox patterns.
 * **`identity-access/`**: The Party Data Service (MongoDB) and Keycloak integration handling Strong Customer Authentication (SCA).
@@ -47,7 +47,7 @@ The repository is structured into distinct Maven modules, compiling down to a re
 ## Chapter 5: OpenShift Sandbox & Deployment
 To simulate the production environment locally without requiring AWS EKS, we utilize a full containerized Service Mesh.
 
-![Local Sandbox Topology](docs/diagrams/Deployment_Sandbox.svg)
+![Local Sandbox Topology](docs/diagrams/rendered/Deployment_Sandbox_v2.svg)
 
 **To boot the environment:**
 1. `cd infrastructure/sandbox/`
@@ -57,12 +57,12 @@ To simulate the production environment locally without requiring AWS EKS, we uti
 ## Chapter 6: TPP Admission & Developer Portal
 The Nebras platform requires rigorous background checks for Third Party Providers. This is managed by the React-based Developer Portal (`frontend-x-bank-souq`).
 
-![Developer Portal Architecture](docs/diagrams/Developer_Portal_Architecture.svg)
+![Developer Portal Architecture](docs/diagrams/rendered/Developer_Portal_Architecture_v2.svg)
 
 ## Chapter 7: The AI Agent Interface (MCP Server)
 The platform natively exposes its Agentive workflows to external AI Agents (like Claude Desktop) via the **Model Context Protocol (MCP)**. This allows external LLMs to execute Salary Batches or Car Lease payments as simple "AI Tools".
 
-![MCP Nebras Sequence](docs/diagrams/MCP_Nebras_Sequence.svg)
+![MCP Nebras Sequence](docs/diagrams/rendered/MCP_Nebras_Sequence_v2.svg)
 
 ## Chapter 8: Strategic Analysis & AI Productivity
 ### Strategic SWOT Analysis
