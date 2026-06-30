@@ -15,7 +15,10 @@ rectangle "OPF-Agentive-Platform" {
     rectangle "Developer Portal\n<<Next.js/React>>" as devPortal
     rectangle "HITL Dashboard\n<<Next.js/React>>" as hitlPortal
     
-    rectangle "API Gateway & WebSockets\n<<Spring Boot>>" as gateway
+    rectangle "API Gateway\n<<Spring Boot>>" as apiGw
+    rectangle "AI Gateway\n<<Standalone Microservice>>" as aiGw
+    
+    rectangle "AI Security Guardrails\n<<Pluggable NeMo/Lakera>>" as aiSec
     
     rectangle "Cognitive Agent-FTE Layer\n<<Temporal/Spring Boot>>" as cog
     rectangle "Identity & Access\n<<Hexagonal IAM/Vault Mock>>" as idp
@@ -30,10 +33,12 @@ rectangle "External Enterprise Tools" {
 
 dev --> devPortal : Integrates APIs & Chats
 ba --> hitlPortal : Uploads PRD & Reviews
-devPortal --> gateway : API & WS calls
-hitlPortal --> gateway : API & WS calls
-kafka --> cog : Event-Driven Webhooks
-gateway --> cog : Triggers Workflows & Agents
+devPortal --> apiGw : REST & WS calls
+hitlPortal --> apiGw : REST & WS calls
+apiGw --> aiGw : AI Intent Traffic
+kafka --> aiGw : Event-Driven Webhooks
+aiGw --> aiSec : Token Validated, Consent Bound
+aiSec --> cog : Context Poisoning Clean
 cog --> idp : Resolves Agent Identity (RBAC)
 cog --> github : WebClientGithubAdapter
 cog --> jira : WebClientJiraAdapter

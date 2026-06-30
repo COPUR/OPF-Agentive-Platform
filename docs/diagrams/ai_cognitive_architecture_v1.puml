@@ -14,7 +14,9 @@ node "Presentation Layer" {
 
 node "Agentive Platform (OpenShift ROSA)" {
     
-    component "WebSocket Bridge\n<<Spring Boot>>" as gateway
+    component "API Gateway\n<<Spring Boot>>" as apiGw
+    component "AI Gateway\n<<Standalone Microservice>>" as aiGw
+    component "AI Security Guardrails\n<<Pluggable NeMo/Lakera>>" as aiSec
     
     node "Cognitive Agent-FTE Layer" {
         component "FTE Harness Coordinator\n<<Task Dispatcher>>" as harness
@@ -34,8 +36,10 @@ node "Agentive Platform (OpenShift ROSA)" {
 }
 
 hitl --> [HITL Dashboard (Next.js)] : Chat & PRD
-[HITL Dashboard (Next.js)] --> gateway : WebSocket (Virtual Threads)
-gateway --> harness : Dispatches Task (AgentFteRole)
+[HITL Dashboard (Next.js)] --> apiGw : WebSocket (Virtual Threads)
+apiGw --> aiGw : AI Intent Traffic
+aiGw --> aiSec : Validates Authz & Consent
+aiSec --> harness : Clean Context (No Poisoning)
 
 harness --> agents : Maps to Specific Agent
 agents --> idp : Resolves Identity Profile & Vault Path

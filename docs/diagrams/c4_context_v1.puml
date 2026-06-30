@@ -24,14 +24,14 @@ package "OPF Agentive Platform" {
 package "External Enterprise Systems" {
     component "GitHub" as GitHub
     component "Atlassian Jira" as Jira
-    component "AWS Secrets Manager" as Vault
+    component "HashVault Manager" as Vault
     component "Legacy Finacle/SOA" as Finacle
 }
 
 TPP --> DevPortal : Integrates & Chats
 BA --> HitlDashboard : Uploads PRD & Approves
-DevPortal --> Core : WebSockets / REST
-HitlDashboard --> Core : WebSockets / REST
+DevPortal --> Core : WebSockets / REST (via API/AI Gateways)
+HitlDashboard --> Core : WebSockets / REST (via API/AI Gateways)
 Kafka --> Core : Pushes Webhooks (Autonomous Ingestion)
 Customer --> Core : SCA Consent Approval
 Core --> GitHub : Reads PRDs (WebClient)

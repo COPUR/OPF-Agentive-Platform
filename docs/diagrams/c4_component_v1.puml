@@ -4,6 +4,8 @@ skinparam component {
 }
 
 package "Agentive Backend Core" {
+    component "StandaloneAIGateway\n<<Microservice>>" as AIGateway
+    component "AIGuardrailInterceptor\n<<Pluggable Security>>" as Guardrail
     component "AgentFteWebSocketHandler\n<<Spring WebSockets>>" as WSHandler
     component "AgentIngestionKafkaListener\n<<Spring Kafka>>" as KafkaListener
     component "FteHarnessCoordinator\n<<Agent Orchestrator>>" as Coordinator
@@ -19,8 +21,10 @@ package "Agentive Backend Core" {
 database "Memory Bank\n<<MongoDB>>" as MemoryBank
 queue "CBUAE OpenFinance Events" as KafkaTopic
 
-WSHandler --> Coordinator : Dispatches Chat Tasks
-KafkaListener --> Coordinator : Autonomous Ingestion
+WSHandler --> AIGateway : Routes Intent
+KafkaListener --> AIGateway : Routes Autonomous Intent
+AIGateway --> Guardrail : Token Validated (Authz)
+Guardrail --> Coordinator : Context Poisoning Cleaned
 Coordinator --> Economics : authorizeAndConsume(Tokens)
 Coordinator --> Harness : executeWithMemory(Session)
 Coordinator --> MemoryBank : Persists State
