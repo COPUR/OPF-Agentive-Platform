@@ -15,13 +15,14 @@ rectangle "OPF-Agentive-Platform" {
     rectangle "Developer Portal\n<<Next.js/React>>" as devPortal
     rectangle "HITL Dashboard\n<<Next.js/React>>" as hitlPortal
     
-    rectangle "API Gateway\n<<Spring Boot>>" as apiGw
-    rectangle "AI Gateway\n<<Standalone Microservice>>" as aiGw
+    rectangle "Kong API Gateway\n<<North-South (PSD2/CDR)>>" as apiGw
+    rectangle "Kong AI Gateway\n<<Standalone / Kong Mesh>>" as aiGw
     
-    rectangle "AI Security Guardrails\n<<Pluggable NeMo/Lakera>>" as aiSec
+    rectangle "AI Autonomous Guardrails\n<<Intelligent Routing & PII Scrubbing>>" as aiSec
     
-    rectangle "Cognitive Agent-FTE Layer\n<<Temporal/Spring Boot>>" as cog
+    rectangle "Cognitive Agent-FTE Layer\n<<Temporal / Spring Boot>>" as cog
     rectangle "Identity & Access\n<<Hexagonal IAM/Vault Mock>>" as idp
+    rectangle "Kong Mesh / Kuma\n<<East-West (mTLS / OPA)>>" as mesh
     rectangle "Mediator Layer\n<<Spring Boot CQRS>>" as med
     rectangle "Anti-Corruption Layer\n<<Spring Boot>>" as acl
 }
@@ -42,7 +43,8 @@ aiSec --> cog : Context Poisoning Clean
 cog --> idp : Resolves Agent Identity (RBAC)
 cog --> github : WebClientGithubAdapter
 cog --> jira : WebClientJiraAdapter
-cog --> med : Executes Banking Saga
+cog --> mesh : Agentic Action (mTLS/OPA)
+mesh --> med : Enforces Zero-Trust
 med --> acl : Routes to Legacy Systems
 
 @enduml

@@ -1,8 +1,8 @@
 @startuml Sequence_Diagram
 actor Client
-participant "API Gateway" as GW
-participant "AI Gateway (Standalone)" as AIGW
-participant "AI Guardrails" as SEC
+participant "Kong API Gateway (North-South)" as GW
+participant "Kong AI Gateway" as AIGW
+participant "Kong Mesh (OPA/mTLS)" as SEC
 participant "Keycloak IdP" as IDP
 participant "Cognitive Layer" as COG
 participant "Mediator (Saga)" as MED

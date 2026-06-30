@@ -30,8 +30,8 @@ package "External Enterprise Systems" {
 
 TPP --> DevPortal : Integrates & Chats
 BA --> HitlDashboard : Uploads PRD & Approves
-DevPortal --> Core : WebSockets / REST (via API/AI Gateways)
-HitlDashboard --> Core : WebSockets / REST (via API/AI Gateways)
+DevPortal --> Core : WebSockets / REST (via Kong API/AI Gateways)
+HitlDashboard --> Core : WebSockets / REST (via Kong API/AI Gateways)
 Kafka --> Core : Pushes Webhooks (Autonomous Ingestion)
 Customer --> Core : SCA Consent Approval
 Core --> GitHub : Reads PRDs (WebClient)

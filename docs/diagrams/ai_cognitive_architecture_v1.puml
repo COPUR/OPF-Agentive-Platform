@@ -14,9 +14,9 @@ node "Presentation Layer" {
 
 node "Agentive Platform (OpenShift ROSA)" {
     
-    component "API Gateway\n<<Spring Boot>>" as apiGw
-    component "AI Gateway\n<<Standalone Microservice>>" as aiGw
-    component "AI Security Guardrails\n<<Pluggable NeMo/Lakera>>" as aiSec
+    component "Kong API Gateway\n<<North-South>>" as apiGw
+    component "Kong AI Gateway\n<<Intelligent Routing>>" as aiGw
+    component "AI Autonomous Guardrails\n<<Pluggable>>" as aiSec
     
     node "Cognitive Agent-FTE Layer" {
         component "FTE Harness Coordinator\n<<Task Dispatcher>>" as harness

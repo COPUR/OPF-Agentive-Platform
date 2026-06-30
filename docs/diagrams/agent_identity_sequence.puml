@@ -9,8 +9,8 @@ skinparam sequence {
 
 actor "Business Analyst / TPP" as User
 participant "HITL Dashboard\n<<Next.js>>" as UI
-participant "API Gateway\n<<Spring Boot>>" as WS
-participant "AI Gateway & Security\n<<Pluggable Guardrails>>" as AIGW
+participant "Kong API Gateway\n<<North-South>>" as WS
+participant "Kong AI Gateway\n<<Intelligent Routing>>" as AIGW
 participant "FteHarnessCoordinator\n<<Task Dispatcher>>" as Harness
 participant "MockCorporateIdpAdapter\n<<AgentIdentityProviderPort>>" as IDP
 participant "AgentFteData\n<<Memory>>" as AgentData

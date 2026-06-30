@@ -11,9 +11,9 @@ This document outlines the core architectural components of the Agentive-OpenFin
 - **Internal HITL Dashboard (Next.js)**: Serves internal Business Analysts to upload PRDs, interact directly with Agent-FTEs via WebSocket chat, and approve operations.
 
 ## Security & Access Management
-- **API Firewall**: CrowdStrike + AWS WAF
-- **API Gateway**: Spring Cloud Gateway for traditional REST and WebSockets.
-- **Standalone AI Gateway (Kong HA Cluster)**: A dedicated microservice acting as the primary AI ingress. Deployed as a stateless **High-Availability (HA) ReplicaSet** integrated into the **Kong Mesh (Kuma)** (with Envoy data planes) to eliminate Single Point of Failure (SPOF) risks. Before routing traffic to the Cognitive Layer, it enforces Agent Auth/Authz, dynamically validates OAuth2/JWT tokens against Keycloak, and asserts SCA Consent Management bounds for the session.
+- **Kong API Gateway (North-South)**: Banks extensively use Kong to manage Open Banking compliance (PSD2, CDR), handling strict mTLS, OAuth2/OIDC, and Consent Orchestration when dealing with external Third-Party Providers.
+- **Kong Mesh / Kuma (East-West)**: Used internally to enforce Zero-Trust architectures. By enforcing mTLS between every single microservice pod and applying centralized OPA (Open Policy Agent) rules, they prevent lateral movement during breaches.
+- **Kong AI Gateway**: Early adopters are utilizing it for Autonomous Guardrails (Prompt Injection protection, PII scrubbing) and Intelligent Routing (dynamically switching between OpenAI, Anthropic, or internal Llama models to manage costs and data privacy). This stateless gateway is integrated directly into the Kong Mesh.
 - **Agent Identity Management (IAM)**: A strict **Hexagonal Architecture** separates Agent credentials. `AgentIdentityProviderPort` dynamically fetches Agent Identity Profiles (including decoupled GitHub/Jira credentials from HashVault Manager) for precise **Role-Based Access Control (RBAC)** across specialized AI workloads.
 - **AI Security (Context Protection)**: Incoming payloads are scanned by a brand-agnostic, pluggable **AI Guardrail** layer (adaptable to internal Security LLMs, Nvidia NeMo, or Lakera) to prevent **Context Poisoning** and prompt injection. This ensures malicious RAG payloads cannot manipulate Agent intents.
 
