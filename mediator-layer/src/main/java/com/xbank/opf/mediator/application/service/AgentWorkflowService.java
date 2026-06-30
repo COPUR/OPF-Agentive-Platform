@@ -1,11 +1,11 @@
-package com.xbank.opf.mediator.adapter.in.kafka;
+package com.xbank.opf.mediator.application.service;
 
 import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class AgentWorkflowOrchestrator {
-
+public class AgentWorkflowService {
+    
     /**
      * Bootstraps the Multi-Agent Workflow, executing probabilistic AI intent 
      * while utilizing Graceful Cognitive Degradation (Circuit Breakers) if inference fails.

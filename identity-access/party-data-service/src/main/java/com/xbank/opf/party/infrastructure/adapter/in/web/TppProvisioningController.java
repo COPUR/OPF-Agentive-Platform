@@ -1,4 +1,4 @@
-package com.xbank.opf.party.controller;
+package com.xbank.opf.party.infrastructure.adapter.in.web;
 
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;

@@ -1,9 +1,10 @@
-package com.xbank.opf.acl.adapter;
+package com.xbank.opf.acl.infrastructure.adapter.out;
 
+import com.xbank.opf.acl.domain.port.out.CoreBankingPort;
 import org.springframework.stereotype.Component;
 
 @Component
-public class FinacleAdapter {
+public class FinacleAdapter implements CoreBankingPort {
 
     /**
      * Translates modern JSON Open Finance requests into Legacy Finacle XML SOAP calls.
