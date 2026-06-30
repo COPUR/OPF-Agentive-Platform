@@ -13,8 +13,8 @@ This document outlines the core architectural components of the Agentive-OpenFin
 ## Security & Access Management
 - **API Firewall**: CrowdStrike + AWS WAF
 - **API Gateway**: Spring Cloud Gateway for traditional REST and WebSockets.
-- **Standalone AI Gateway**: A dedicated microservice (similar to Kong) acting as the primary AI ingress. Before routing traffic to the Cognitive Layer, it enforces Agent Auth/Authz, dynamically validates OAuth2/JWT tokens against Keycloak, and asserts SCA Consent Management bounds for the session.
-- **Agent Identity Management (IAM)**: A strict **Hexagonal Architecture** separates Agent credentials. `AgentIdentityProviderPort` dynamically fetches Agent Identity Profiles (including decoupled GitHub/Jira credentials from AWS Secrets Manager) for precise **Role-Based Access Control (RBAC)** across specialized AI workloads.
+- **Standalone AI Gateway (Kong HA Cluster)**: A dedicated microservice acting as the primary AI ingress. Deployed as a stateless **High-Availability (HA) ReplicaSet** integrated into the **Kong Mesh (Kuma)** (with Envoy data planes) to eliminate Single Point of Failure (SPOF) risks. Before routing traffic to the Cognitive Layer, it enforces Agent Auth/Authz, dynamically validates OAuth2/JWT tokens against Keycloak, and asserts SCA Consent Management bounds for the session.
+- **Agent Identity Management (IAM)**: A strict **Hexagonal Architecture** separates Agent credentials. `AgentIdentityProviderPort` dynamically fetches Agent Identity Profiles (including decoupled GitHub/Jira credentials from HashVault Manager) for precise **Role-Based Access Control (RBAC)** across specialized AI workloads.
 - **AI Security (Context Protection)**: Incoming payloads are scanned by a brand-agnostic, pluggable **AI Guardrail** layer (adaptable to internal Security LLMs, Nvidia NeMo, or Lakera) to prevent **Context Poisoning** and prompt injection. This ensures malicious RAG payloads cannot manipulate Agent intents.
 
 ## AI & Cognitive Agent-FTE Layer

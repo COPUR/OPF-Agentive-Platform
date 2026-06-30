@@ -9,54 +9,62 @@ skinparam component {
 
 node "OpenShift Cluster" as k8s {
     
-    component "Istio Ingress Gateway" as ingress
+    component "Kong Mesh Ingress Gateway" as ingress
 
     node "Namespace: opf-sandbox" {
         
         node "Pod: Keycloak" {
-            component "Envoy Proxy\n<<Sidecar>>" as e1 #lightgrey
+            component "Kuma Data Plane\n<<Envoy Sidecar>>" as e1 #lightgrey
             component "Keycloak" as kc
             e1 <-> kc
         }
         
         node "Pod: MongoDB" {
-            component "Envoy Proxy\n<<Sidecar>>" as e2 #lightgrey
+            component "Kuma Data Plane\n<<Envoy Sidecar>>" as e2 #lightgrey
             database "MongoDB" as mongo
             e2 <-> mongo
         }
         
         node "Pod: Temporal" {
-            component "Envoy Proxy\n<<Sidecar>>" as e3 #lightgrey
+            component "Kuma Data Plane\n<<Envoy Sidecar>>" as e3 #lightgrey
             component "Temporal Server" as temp
             e3 <-> temp
         }
         
         node "Pod: Postgres Vector" {
-            component "Envoy Proxy\n<<Sidecar>>" as e4 #lightgrey
+            component "Kuma Data Plane\n<<Envoy Sidecar>>" as e4 #lightgrey
             database "PostgreSQL\n<<pgvector>>" as pg
             e4 <-> pg
         }
         
         node "Pod: Kafka" {
-            component "Envoy Proxy\n<<Sidecar>>" as e5 #lightgrey
+            component "Kuma Data Plane\n<<Envoy Sidecar>>" as e5 #lightgrey
             component "Kafka Broker" as kafka
             e5 <-> kafka
         }
         node "Pod: React Portal" {
-            component "Envoy Proxy\n<<Sidecar>>" as e6 #lightgrey
+            component "Kuma Data Plane\n<<Envoy Sidecar>>" as e6 #lightgrey
             component "frontend-x-bank-souq" as portal
             e6 <-> portal
         }
         
+        node "Pod: Kong AI Gateway (HA ReplicaSet)" {
+            component "Kuma Data Plane\n<<Envoy Sidecar>>" as ek #lightgrey
+            component "Kong Gateway\n<<DB-less>>" as kong
+            ek <-> kong
+        }
+        
         node "Pod: MCP Server" {
-            component "Envoy Proxy\n<<Sidecar>>" as e7 #lightgrey
+            component "Kuma Data Plane\n<<Envoy Sidecar>>" as e7 #lightgrey
             component "opf-nebras-mcp-server" as mcp
             e7 <-> mcp
         }
     }
     
     ingress --> e6 : /portal routing
-    ingress --> e7 : /mcp routing
+    ingress --> ek : /ai-intent routing
+    ek --> e7 : Routes to MCP
+    ek --> e3 : Routes to Temporal
     ingress --> e1 : /auth routing
     e1 --> e2 : Stores Party Data
     e3 --> e4 : Stores Workflow State
