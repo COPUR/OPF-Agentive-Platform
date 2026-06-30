@@ -26,7 +26,7 @@ class: lead
 ---
 
 ## Architecture Overview
-![h:400](diagrams/c4_container_v1.svg)
+![h:400](diagrams/C4_Container.svg)
 
 ---
 

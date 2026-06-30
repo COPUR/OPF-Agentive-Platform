@@ -5,7 +5,7 @@
 Legacy banking interfaces are too tightly coupled to satisfy immediate OpenFinance capabilities required by UAE Central Bank regulations.
 
 ## 2. Proposed Architecture
-![Container Diagram](diagrams/c4_container_v1.svg)
+![Container Diagram](diagrams/C4_Container.svg)
 
 ## 3. Trade-offs & Tech Debts
 - **Tech Debt:** Maintaining duplicate data in the Silver Copy DB.

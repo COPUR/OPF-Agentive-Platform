@@ -7,6 +7,10 @@ skinparam rectangle {
 actor "TPP Developer" as dev
 actor "Business Analyst" as ba
 
+rectangle "CBUAE Open Finance Ecosystem" {
+    queue "CBUAE Events\n<<Apache Kafka>>" as kafka
+}
+
 rectangle "OPF-Agentive-Platform" {
     rectangle "Developer Portal\n<<Next.js/React>>" as devPortal
     rectangle "HITL Dashboard\n<<Next.js/React>>" as hitlPortal
@@ -19,12 +23,20 @@ rectangle "OPF-Agentive-Platform" {
     rectangle "Anti-Corruption Layer\n<<Spring Boot>>" as acl
 }
 
+rectangle "External Enterprise Tools" {
+    rectangle "GitHub\n<<REST API>>" as github
+    rectangle "Atlassian Jira\n<<REST API>>" as jira
+}
+
 dev --> devPortal : Integrates APIs & Chats
 ba --> hitlPortal : Uploads PRD & Reviews
 devPortal --> gateway : API & WS calls
 hitlPortal --> gateway : API & WS calls
+kafka --> cog : Event-Driven Webhooks
 gateway --> cog : Triggers Workflows & Agents
 cog --> idp : Resolves Agent Identity (RBAC)
+cog --> github : WebClientGithubAdapter
+cog --> jira : WebClientJiraAdapter
 cog --> med : Executes Banking Saga
 med --> acl : Routes to Legacy Systems
 
