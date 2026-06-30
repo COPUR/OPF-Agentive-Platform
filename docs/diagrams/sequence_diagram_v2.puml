@@ -1,4 +1,4 @@
-@startuml Sequence_Diagram
+@startuml Sequence_Diagram_v2
 actor Client
 participant "Kong API Gateway (North-South)" as GW
 participant "Kong AI Gateway" as AIGW

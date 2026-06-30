@@ -1,4 +1,4 @@
-@startuml C4_Container
+@startuml C4_Container_v2
 skinparam rectangle {
     BackgroundColor #438dd5
     FontColor white

@@ -21,10 +21,10 @@ Add the SDK to your Maven `pom.xml`:
 To help you visualize how the SDK encapsulates the Open Finance complexity, please review the following diagrams:
 
 ### SDK Class Architecture
-![SDK Class Diagram](diagrams/Nebras_SDK_Class_Diagram.svg)
+![SDK Class Diagram](diagrams/Nebras_SDK_Class_Diagram_v2.svg)
 
 ### SDK Runtime Flow (Sequence)
-![SDK Sequence Diagram](diagrams/Nebras_SDK_Sequence_Diagram.svg)
+![SDK Sequence Diagram](diagrams/Nebras_SDK_Sequence_Diagram_v2.svg)
 
 ## 3. The New Implementation Flow
 

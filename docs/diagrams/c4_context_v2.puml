@@ -1,4 +1,4 @@
-@startuml C4_Context
+@startuml C4_Context_v2
 !define RECTANGLE class
 
 skinparam rectangle {

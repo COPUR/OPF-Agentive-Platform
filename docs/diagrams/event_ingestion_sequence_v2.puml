@@ -1,4 +1,4 @@
-@startuml Event_Ingestion_Sequence
+@startuml Event_Ingestion_Sequence_v2
 autonumber
 actor "Third Party / TPP" as TPP
 queue "Kafka Topic\ncbuae.openfinance.events" as Kafka

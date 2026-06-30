@@ -1,4 +1,4 @@
-@startuml State_Machine
+@startuml State_Machine_v2
 [*] --> Pending
 
 Pending --> Executing : Start Saga

@@ -1,4 +1,4 @@
-@startuml Nebras_SDK_Sequence_Diagram
+@startuml Nebras_SDK_Sequence_Diagram_v2
 skinparam ParticipantPadding 20
 skinparam BoxPadding 10
 

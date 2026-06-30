@@ -1,4 +1,4 @@
-@startuml Agent_Identity_Sequence
+@startuml Agent_Identity_Sequence_v2
 skinparam sequence {
     ArrowColor #438dd5
     LifeLineBorderColor #a2b4c6

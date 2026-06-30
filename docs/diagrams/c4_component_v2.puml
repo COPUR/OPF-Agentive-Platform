@@ -1,4 +1,4 @@
-@startuml C4_Component
+@startuml C4_Component_v2
 skinparam component {
     BackgroundColor #85bbf0
 }

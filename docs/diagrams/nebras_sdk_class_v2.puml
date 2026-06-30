@@ -1,4 +1,4 @@
-@startuml Nebras_SDK_Class_Diagram
+@startuml Nebras_SDK_Class_Diagram_v2
 skinparam classAttributeIconSize 0
 
 package "com.xbank.opf.sdk" {

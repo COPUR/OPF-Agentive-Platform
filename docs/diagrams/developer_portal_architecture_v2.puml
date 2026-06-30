@@ -1,4 +1,4 @@
-@startuml Developer_Portal_Architecture
+@startuml Developer_Portal_Architecture_v2
 skinparam ParticipantPadding 20
 skinparam BoxPadding 10
 

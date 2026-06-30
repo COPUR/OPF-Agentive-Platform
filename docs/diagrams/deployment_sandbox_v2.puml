@@ -1,4 +1,4 @@
-@startuml Deployment_Sandbox
+@startuml Deployment_Sandbox_v2
 skinparam node {
     BackgroundColor #f4f6f8
     BorderColor #a2b4c6
