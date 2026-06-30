@@ -14,7 +14,7 @@ This document defines the data topologies, persistence layers, and flow of state
 ### 1.2 The Semantic Cache
 - **Engine**: PostgreSQL extended with `pgvector`.
 - **Purpose**: Stores vector embeddings of Natural Language intents. 
-- **Stored XSS Prevention**: To prevent malicious payloads from poisoning the vector space and manipulating future agent decisions, all data must pass through strict write filters and trust scoring before insertion.
+- **Stored XSS & Context Poisoning Prevention**: To prevent malicious payloads from poisoning the vector space and manipulating future agent decisions, all data must pass through the **AI Security Layer**. The internal Security LLM runs Context Poisoning checks and trust scoring before insertion.
 - **Flow**: When a request hits the Cognitive Layer, it is vectorized. If the Cosine Similarity against the cache is > 0.95, the workflow instantly executes the mapped intent rather than invoking the LLM.
 
 ### 1.3 Identity & Party Data
