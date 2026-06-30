@@ -14,3 +14,7 @@ As part of integrating advanced AI components, this platform implements comprehe
 ## Engineering Delivery & Flow Insights
 - **Signal Separation**: Allows engineering leaders to separate human ingenuity from automated noise to determine if AI tools are boosting product quality or simply inflating codebase activity.
 - **Bottleneck Mitigation**: Helps teams benchmark AI generation against pull request (PR) sizes, code review wait times, and reviewer workloads to ensure senior engineers do not become delivery bottlenecks.
+
+## Agent Economics & Cost Optimization
+- **Token Economics Engine**: The `FteCostOptimizer` evaluates token costs in real-time, enforcing rigid limits on LLM usage. By analyzing `SessionMemory` constraints, it actively throttles the `ModelAgnosticHarness` when a limit is exceeded, trapping the `InsufficientFteBudgetException`.
+- **Temporal Telemetry**: Metadata extracted directly from Temporal workflows attributes compute and token consumption to specific Agent roles (e.g. `AUTONOMOUS_INGESTION`), enabling deep FinOps dashboards for AI.

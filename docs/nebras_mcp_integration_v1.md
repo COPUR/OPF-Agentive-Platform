@@ -45,3 +45,8 @@ Once configured, the AI Agent will automatically have access to:
 > "We need to run the monthly payroll for Corporate Account CORP_12345. There are 50 employees and the total is 250,000 AED. Please generate the consent link first, and once I approve it, execute the batch."
 
 The AI will handle the sequential orchestration of the MCP tools automatically!
+
+## 4. Agent Economics & Temporal Coordination
+When Claude invokes these MCP tools, the requests are routed through the `FteHarnessCoordinator`.
+- **Economics**: Every MCP tool execution consumes token budgets monitored by the `FteCostOptimizer`. If an external LLM attempts to spam or loop over an MCP tool, the system will throw an `InsufficientFteBudgetException`, protecting the backend from runaway costs.
+- **State Management**: The MCP session history is durably logged in the `MemoryBank` via Temporal, allowing multi-turn conversational persistence even if the local Claude Desktop client restarts.

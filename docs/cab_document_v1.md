@@ -6,9 +6,13 @@ Deployment of the v1 Open Finance API Gateway and Mediator layer.
 
 ## 2. Deployment Risks
 - **Risk 1:** Heavy initial load on legacy Finacle APIs during cache warming.
-- **Mitigation:** Rate limiters applied at the Kong API Gateway layer.
+- **Mitigation:** Rate limiters applied at the Spring Cloud Gateway layer.
 - **Risk 2:** Network partition between the Mediator and Kafka Outbox.
 - **Mitigation:** Fallback to local Postgres transactional persistence until Kafka heals.
+- **Risk 3:** WebSocket connection drops during long-running Agentive chat sessions.
+- **Mitigation:** Next.js frontend implements robust automatic reconnects and fetches missed `SessionMemory` state upon reconnection.
+- **Risk 4:** Runaway LLM execution costs.
+- **Mitigation:** `FteCostOptimizer` actively tracks tokens and throws `InsufficientFteBudgetException` if limits are exceeded, routing the alert to the HITL dashboard instead of continuing execution.
 
 ## 3. Rollback Plan
 - Utilizing GitOps (ArgoCD), any failure triggers an immediate automated revert to the previous verified Helm chart state.

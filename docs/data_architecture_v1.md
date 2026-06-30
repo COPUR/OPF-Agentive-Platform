@@ -6,9 +6,9 @@ This document defines the data topologies, persistence layers, and flow of state
 
 ## 1. Topologies & Persistence Layers
 
-### 1.1 The "Memory Banks" (Agent State)
-- **Engine**: PostgreSQL (Relational).
-- **Purpose**: Replaces traditional static read/write models with active Memory Banks. This layer allows agents to recall past user actions, store current multi-agent workflow states, and serve as an asynchronous buffer against the fragile legacy Finacle mainframe.
+### 1.1 The "Memory Banks" (Agent State & Economics)
+- **Engine**: MongoDB (Document).
+- **Purpose**: Replaces traditional static read/write models with active Memory Banks (`MongoMemoryBank.java`). This layer stores the `SessionMemory` enabling long-running Temporal AI workflows to recall past user actions across WebSocket reconnects. It also persistently tracks LLM token consumption (`AgentFteData`) for the `FteCostOptimizer`.
 - **Synchronization**: Updated asynchronously via Kafka when transactions clear, or upon explicit Temporal workflow polling.
 
 ### 1.2 The Semantic Cache

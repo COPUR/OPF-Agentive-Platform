@@ -6,8 +6,13 @@
 
 > **Deep Dive:** For an exhaustive breakdown of the specific Open Finance API Endpoints, Webhook configurations, and the Tripartite AI Architecture (Harness + Cognitive + Model) powering these interactions, please refer to the [API Definitions & AI Anatomy](api_and_ai_anatomy_v1.md) documentation.
 
-## 2. Sequence Workflows
-The following describes the exact routing paths for API requests:
+## 2. Low-Level Agentive Flow (Harness & Economics)
+The following describes the exact routing paths for the AI components:
+- **`FteHarnessCoordinator`**: Acts as the central traffic controller. Receives prompts via `AgentFteWebSocketHandler` or `AgentIngestionKafkaListener`.
+- **`FteCostOptimizer`**: Before execution, the Coordinator delegates to the Optimizer to assert budget constraints using `AgentFteData`.
+- **`ModelAgnosticHarness`**: The Temporal workflow executing the prompt. It retrieves the conversation context from `SessionMemory` inside MongoDB.
+- **`12-Factor WebClient Ports`**: The Harness translates intent into programmatic actions via strictly decoupled Hexagonal outbound ports (`WebClientGithubAdapter`, `WebClientJiraAdapter`), loaded via Spring `@Value` configs.
+
 ![Sequence Diagram](diagrams/Sequence_Diagram.svg)
 
 ## 3. State Management & Saga

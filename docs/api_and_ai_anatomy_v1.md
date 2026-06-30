@@ -7,7 +7,7 @@ This document outlines the API specifications required for UAECB OpenFinance com
 
 ## Part 1: Open Finance API Endpoints
 
-The API Gateway (Kong) exposes the following RESTful paths to the Developer Portal, heavily secured by DPoP and Keycloak validations.
+The Spring Cloud Gateway (equipped with Virtual Thread WebSockets) exposes the following RESTful paths to the Next.js Developer Portal, heavily secured by DPoP and Hexagonal IAM validations.
 
 ### 1.1 Account Information Service Provider (AISP)
 | Method | Endpoint | Description | Requires Consent |
@@ -24,14 +24,16 @@ The API Gateway (Kong) exposes the following RESTful paths to the Developer Port
 
 ---
 
-## Part 2: Webhooks (Asynchronous Notifications)
+## Part 2: Kafka Autonomous Event Ingestion
 
-To prevent aggressive polling from third-party applications, the mediator layer emits asynchronous events.
+To prevent aggressive polling from third-party applications, the CBUAE ecosystem emits asynchronous OpenFinance events via Apache Kafka.
 
-| Endpoint | Payload Trigger | Description |
+The Agentive platform traps these using the `AgentIngestionKafkaListener` mapped to the `cbuae.openfinance.events` topic.
+
+| Topic / Payload Trigger | Description | Autonomous Handling |
 | :--- | :--- | :--- |
-| `POST /webhooks/consent-revoked` | `{ "consentId": "...", "status": "Revoked" }` | Fired when a user revokes their SCA Consent inside the IdP portal. |
-| `POST /webhooks/payment-status` | `{ "paymentId": "...", "status": "Settled" }` | Fired by the Saga Orchestrator when a Finacle payment clears successfully. |
+| `ConsentRevokedEvent` | Fired when a user revokes their SCA Consent. | Pushed to `AUTONOMOUS_INGESTION` Agent to dynamically scrub DBs. |
+| `PaymentSettledEvent` | Fired by the Saga Orchestrator post Finacle clear. | Pushed to Agent to asynchronously notify Jira/GitHub WebClients. |
 
 ---
 
