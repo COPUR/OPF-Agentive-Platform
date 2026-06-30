@@ -9,7 +9,7 @@ The financial sector is bounded by legacy mainframe limitations. This platform a
 
 Rather than relying on static APIs and brittle state machines, this platform utilizes **Autonomous AI Agents** orchestrated via Temporal to deterministically analyze, route, and execute Open Finance intents, all while maintaining absolute Data Sovereignty.
 
-![Platform Context](docs/diagrams/c4_context_v1.svg)
+![Platform Context](docs/diagrams/C4_Context.svg)
 
 ---
 
@@ -21,7 +21,7 @@ Traditional stateless microservices are insufficient for long-running AI workflo
 4. **Memory Banks**: Stateful PostgreSQL "Silver Copies" act as an asynchronous buffer against the fragile legacy mainframe.
 5. **The Deterministic Kill Switch**: Hardwired into the Istio Service Mesh. If an anomaly is detected, the agent's SPIFFE ID is revoked and the Temporal pod is instantly scaled to zero.
 
-![Cognitive Architecture](docs/diagrams/ai_cognitive_architecture_v1.svg)
+![Cognitive Architecture](docs/diagrams/AI_Cognitive_Architecture.svg)
 
 ---
 
@@ -57,12 +57,12 @@ To simulate the production environment locally without requiring AWS EKS, we uti
 ## Chapter 6: TPP Admission & Developer Portal
 The Nebras platform requires rigorous background checks for Third Party Providers. This is managed by the React-based Developer Portal (`frontend-x-bank-souq`).
 
-![Developer Portal Architecture](docs/diagrams/developer_portal_architecture_v1.svg)
+![Developer Portal Architecture](docs/diagrams/Developer_Portal_Architecture.svg)
 
 ## Chapter 7: The AI Agent Interface (MCP Server)
 The platform natively exposes its Agentive workflows to external AI Agents (like Claude Desktop) via the **Model Context Protocol (MCP)**. This allows external LLMs to execute Salary Batches or Car Lease payments as simple "AI Tools".
 
-![MCP Nebras Sequence](docs/diagrams/mcp_nebras_sequence_v1.svg)
+![MCP Nebras Sequence](docs/diagrams/MCP_Nebras_Sequence.svg)
 
 ## Chapter 8: Strategic Analysis & AI Productivity
 ### Strategic SWOT Analysis
