@@ -30,5 +30,5 @@ This document outlines the concrete technology stack powering the Agentive Open 
 - **Event Broker**: Confluent Kafka. Serves as the central nervous system for OpenFinance webhooks. The `AgentIngestionKafkaListener` subscribes to the `cbuae.openfinance.events` topic and directly triggers the autonomous Agent-FTEs.
 
 ## 6. Security Architecture
-![Agent Identity Sequence Diagram](diagrams/Agent_Identity_Sequence_v2.svg)
+![Agent Identity Sequence Diagram](diagrams/rendered/Agent_Identity_Sequence_v2.svg)
 - **Identity Decoupling**: Each Agent FTE operates with a distinct `AgentIdentityProfile`. Credentials for GitHub/Jira are not held in memory but fetched from an external Vault just-in-time via an outbound port.

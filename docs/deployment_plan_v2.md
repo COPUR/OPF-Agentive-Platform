@@ -18,7 +18,7 @@ All AWS ROSA (Red Hat OpenShift on AWS) configurations, MSK (Kafka) clusters, an
 ## 4. Local Sandbox Environment (OpenShift/Istio)
 For local development, we maintain a complete OpenShift Sandbox ecosystem via CodeReady Containers (CRC) or a local K3s instance mapped to Istio. This ensures that the Zero-Trust mesh policies developed locally behave identically in AWS EKS.
 
-![Local Sandbox Topology](diagrams/Deployment_Sandbox_v2.svg)
+![Local Sandbox Topology](diagrams/rendered/Deployment_Sandbox_v2.svg)
 
 **To spin up the sandbox:**
 1. Navigate to `infrastructure/sandbox/`

@@ -5,7 +5,7 @@
 The OPF-Agentive-Platform translates legacy core banking requests into unified Open Finance CBUAE standards.
 
 ## 2. Architecture Context
-![System Context](diagrams/C4_Context_v2.svg)
+![System Context](diagrams/rendered/C4_Context_v2.svg)
 
 ## 4. Core Workflows (Agentive Flows)
 
