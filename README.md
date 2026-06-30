@@ -72,22 +72,22 @@ The platform natively exposes its Agentive workflows to external AI Agents (like
 * **Threats**: "Configuration Drift" caused by autonomous scaling, and potential Prompt Injection bypasses.
 
 ### AI Productivity Tracking (DORA)
-We utilize background telemetry (`Agent5Dora`) to track the exact ratio of Human-vs-AI code generation inline within the IDE, protecting senior engineers from review bottlenecks. See [AI Productivity Tracking](docs/ai_productivity_tracking_v1.md).
+We utilize background telemetry (`Agent5Dora`) to track the exact ratio of Human-vs-AI code generation inline within the IDE, protecting senior engineers from review bottlenecks. See [AI Productivity Tracking](docs/ai_productivity_tracking_v2.md).
 
 ---
 
 ## Chapter 9: The Master Documentation Codex
-For an exhaustive dive into specific architectural constraints, refer to the following `_v1` baseline documents:
+For an exhaustive dive into specific architectural constraints, refer to the following `_v2` baseline documents:
 
 | Document | Description | Link |
 | :--- | :--- | :--- |
-| **System Architecture** | Overarching Component Layout | [Link](docs/system_architecture_v1.md) |
-| **Technology Architecture** | Concrete Stack & Infra Choices | [Link](docs/technology_architecture_v1.md) |
-| **Data Architecture** | CQRS, Vector Cache, and Memory Banks | [Link](docs/data_architecture_v1.md) |
-| **High-Level Design (HLD)** | Top-level system flows | [Link](docs/hld_document_v1.md) |
-| **Low-Level Design (LLD)** | Component interactions & class structures | [Link](docs/lld_document_v1.md) |
-| **API & AI Anatomy** | Endpoints, Webhooks & The Sandwich Pattern | [Link](docs/api_and_ai_anatomy_v1.md) |
-| **Business Context** | UAECB Regulations & Alignments | [Link](docs/business_context_and_regulations_v1.md) |
-| **Deployment Plan** | OpenShift / Terraform execution strategy | [Link](docs/deployment_plan_v1.md) |
-| **Architecture Review Board**| ARB Decisions & Derogations | [Link](docs/arb_document_v1.md) |
-| **Change Advisory Board** | CAB Deployment Risks | [Link](docs/cab_document_v1.md) |
+| **System Architecture** | Overarching Component Layout | [Link](docs/system_architecture_v2.md) |
+| **Technology Architecture** | Concrete Stack & Infra Choices | [Link](docs/technology_architecture_v2.md) |
+| **Data Architecture** | CQRS, Vector Cache, and Memory Banks | [Link](docs/data_architecture_v2.md) |
+| **High-Level Design (HLD)** | Top-level system flows | [Link](docs/hld_document_v2.md) |
+| **Low-Level Design (LLD)** | Component interactions & class structures | [Link](docs/lld_document_v2.md) |
+| **API & AI Anatomy** | Endpoints, Webhooks & The Sandwich Pattern | [Link](docs/api_and_ai_anatomy_v2.md) |
+| **Business Context** | UAECB Regulations & Alignments | [Link](docs/business_context_and_regulations_v2.md) |
+| **Deployment Plan** | OpenShift / Terraform execution strategy | [Link](docs/deployment_plan_v2.md) |
+| **Architecture Review Board**| ARB Decisions & Derogations | [Link](docs/arb_document_v2.md) |
+| **Change Advisory Board** | CAB Deployment Risks | [Link](docs/cab_document_v2.md) |

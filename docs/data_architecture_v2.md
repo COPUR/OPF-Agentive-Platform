@@ -1,6 +1,6 @@
 # Data Architecture
 **Project:** OPF-Agentive-Platform
-**Version:** v1
+**Version:** v2
 
 This document defines the data topologies, persistence layers, and flow of state throughout the Agentive Open Finance Platform.
 

@@ -1,6 +1,6 @@
 # Technology Architecture
 **Project:** OPF-Agentive-Platform
-**Version:** v1
+**Version:** v2
 
 This document outlines the concrete technology stack powering the Agentive Open Finance Platform, designed for extreme scalability, data sovereignty, and zero-trust security.
 

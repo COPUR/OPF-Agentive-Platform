@@ -2,7 +2,7 @@
 **Project:** OPF-Agentive-Platform
 
 ## 1. Change Summary
-Deployment of the v1 Open Finance API Gateway and Mediator layer.
+Deployment of the v2 Open Finance API Gateway and Mediator layer.
 
 ## 2. Deployment Risks
 - **Risk 1:** Heavy initial load on legacy Finacle APIs during cache warming.
