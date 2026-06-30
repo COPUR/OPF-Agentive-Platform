@@ -11,4 +11,7 @@ public interface OpenFinanceWorkflow {
 
     @WorkflowMethod
     List<String> executeAgenticWorkflow(RequirementDocument requirementDocument);
+
+    @io.temporal.workflow.QueryMethod
+    String fetchAccountsIntent(String userId);
 }

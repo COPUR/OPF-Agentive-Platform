@@ -4,24 +4,28 @@ skinparam rectangle {
     FontColor white
 }
 
-actor "Developer" as dev
+actor "TPP Developer" as dev
+actor "Business Analyst" as ba
 
 rectangle "OPF-Agentive-Platform" {
-    rectangle "Frontend Portal\n<<React/Vite>>" as portal
-    rectangle "API Gateway\n<<Kong/Spring Cloud>>" as gateway
-    rectangle "MCP Server\n<<Node.js/TypeScript>>" as mcp
-    rectangle "Identity & Access\n<<Keycloak + MongoDB>>" as idp
-    rectangle "Cognitive Layer\n<<Temporal>>" as cog
+    rectangle "Developer Portal\n<<Next.js/React>>" as devPortal
+    rectangle "HITL Dashboard\n<<Next.js/React>>" as hitlPortal
+    
+    rectangle "API Gateway & WebSockets\n<<Spring Boot>>" as gateway
+    
+    rectangle "Cognitive Agent-FTE Layer\n<<Temporal/Spring Boot>>" as cog
+    rectangle "Identity & Access\n<<Hexagonal IAM/Vault Mock>>" as idp
     rectangle "Mediator Layer\n<<Spring Boot CQRS>>" as med
     rectangle "Anti-Corruption Layer\n<<Spring Boot>>" as acl
 }
 
-dev --> portal : Browses APIs
-portal --> gateway : API calls
-mcp --> gateway : JSON-RPC calls
-gateway --> idp : Validates token
-gateway --> cog : Triggers workflows
-cog --> med : Executes Saga
-med --> acl : Routes to legacy
+dev --> devPortal : Integrates APIs & Chats
+ba --> hitlPortal : Uploads PRD & Reviews
+devPortal --> gateway : API & WS calls
+hitlPortal --> gateway : API & WS calls
+gateway --> cog : Triggers Workflows & Agents
+cog --> idp : Resolves Agent Identity (RBAC)
+cog --> med : Executes Banking Saga
+med --> acl : Routes to Legacy Systems
 
 @enduml

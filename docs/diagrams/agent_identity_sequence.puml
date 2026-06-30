@@ -1,0 +1,41 @@
+@startuml Agent_Identity_Sequence
+skinparam sequence {
+    ArrowColor #438dd5
+    LifeLineBorderColor #a2b4c6
+    LifeLineBackgroundColor #f4f6f8
+    ParticipantBorderColor #a2b4c6
+    ParticipantBackgroundColor #ffffff
+}
+
+actor "Business Analyst / TPP" as User
+participant "HITL Dashboard\n<<Next.js>>" as UI
+participant "WebSocket Gateway\n<<Spring Boot>>" as WS
+participant "FteHarnessCoordinator\n<<Task Dispatcher>>" as Harness
+participant "MockCorporateIdpAdapter\n<<AgentIdentityProviderPort>>" as IDP
+participant "AgentFteData\n<<Memory>>" as AgentData
+participant "Temporal Workflow\n<<Skill Evolution / Scrum>>" as Temporal
+database "AWS Secrets Manager\n<<Vault>>" as Vault
+
+User -> UI : Submit Request / PRD
+UI -> WS : WebSocket Message (JSON)
+WS -> Harness : dispatchTask(role, prompt)
+
+note over Harness: Maps string "role" to AgentFteRole enum
+
+Harness -> IDP : getIdentityForRole(role)
+IDP --> Harness : AgentIdentityProfile (Employee ID, GitHub username, Vault path)
+
+Harness -> AgentData : Instantiates Agent Memory
+Harness -> AgentData : setIdentityProfile(profile)
+
+Harness -> Temporal : Trigger cognitive processing workflow
+Temporal -> Vault : Fetch Credentials using profile.getCredentialVaultPath()
+Vault --> Temporal : Secure Tokens (GitHub PAT, Jira API Key)
+
+note right of Temporal: Execute business logic and API requests\nwith decoupled corporate identity
+
+Temporal --> Harness : Result (AI Response)
+Harness --> WS : Return Result
+WS --> UI : WebSocket Message (JSON)
+UI --> User : Displays Response
+@enduml

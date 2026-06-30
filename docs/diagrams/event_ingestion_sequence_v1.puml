@@ -1,0 +1,41 @@
+@startuml Event_Ingestion_Sequence
+autonumber
+actor "Third Party / TPP" as TPP
+queue "Kafka Topic\ncbuae.openfinance.events" as Kafka
+participant "AgentIngestionKafkaListener" as Listener
+participant "FteHarnessCoordinator" as Coordinator
+participant "FteCostOptimizer" as Optimizer
+participant "ModelAgnosticHarness" as Harness
+database "MemoryBank" as DB
+
+TPP -> Kafka : Publish Webhook Event (e.g. ConsentCreated)
+Kafka -> Listener : consumeOpenFinanceEvent(eventPayload)
+activate Listener
+
+Listener -> Coordinator : dispatchTask(AUTONOMOUS_INGESTION, prompt)
+activate Coordinator
+
+Coordinator -> Optimizer : authorizeAndConsume(role, prompt)
+activate Optimizer
+Optimizer -> DB : getFteData(sessionId)
+DB --> Optimizer : AgentFteData
+Optimizer -> Optimizer : Assert Budget > Required Cost
+Optimizer -> DB : Persist consumed tokens
+Optimizer --> Coordinator : OK
+deactivate Optimizer
+
+Coordinator -> Harness : executeWithMemory(sessionId, systemPrompt, prompt)
+activate Harness
+Harness -> DB : Load Session Memory
+Harness -> Harness : Process payload via Temporal & LLM
+Harness -> DB : Save new context
+Harness --> Coordinator : AI Response String
+deactivate Harness
+
+Coordinator --> Listener : AI Response
+deactivate Coordinator
+
+Listener -> Listener : log.info("Successfully ingested")
+deactivate Listener
+
+@enduml

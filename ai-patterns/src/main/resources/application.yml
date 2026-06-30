@@ -1,0 +1,17 @@
+opf:
+  fte:
+    economics:
+      initial-budget: 100.00
+      cost-low: 0.05
+      cost-medium: 0.50
+      cost-high: 2.00
+    kafka:
+      execute-topic: fte.task.execute
+      result-topic: fte.task.result
+      group-id: agent-fte-group
+    prompts:
+      AUTONOMOUS_INGESTION: "You are Agent 1: Autonomous Ingestion. Your role is to parse Jira and Confluence inputs into structured schemas."
+      TOPOLOGY_SYNTHESIS: "You are Agent 2: Low-Level Topology Synthesis. Your role is to query CMDB APIs and map logical components."
+      COMPLIANCE_VALIDATION: "You are Agent 3: Compliance Validation. Your role is to scan payloads against vector databases for security breaches."
+      STAKEHOLDER_SIGNOFF: "You are Agent 4: Stakeholder Sign-Off Facilitation. Your role is to coordinate human approvals and generate Google Slides."
+      CODE_AUDIT_TELEMETRY: "You are Agent 5: Code Audit & SRE Telemetry. Your role is to reconcile code against HLDs and compute DORA metrics."

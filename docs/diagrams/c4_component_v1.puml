@@ -3,17 +3,30 @@ skinparam component {
     BackgroundColor #85bbf0
 }
 
-package "Mediator Layer" {
-    component "Request Analyzer\n<<Agentive Controller>>" as req
-    component "Command Handler\n<<CQRS>>" as cmd
-    component "Saga Orchestrator\n<<State Manager>>" as saga
-    component "Transactional Outbox\n<<Kafka Publisher>>" as outbox
+package "Agentive Backend Core" {
+    component "AgentFteWebSocketHandler\n<<Spring WebSockets>>" as WSHandler
+    component "AgentIngestionKafkaListener\n<<Spring Kafka>>" as KafkaListener
+    component "FteHarnessCoordinator\n<<Agent Orchestrator>>" as Coordinator
+    component "FteCostOptimizer\n<<Economics>>" as Economics
+    component "ModelAgnosticHarness\n<<Temporal Workflows>>" as Harness
+    
+    package "12-Factor WebClient Ports" {
+        component "WebClientGithubAdapter" as GithubAdapter
+        component "WebClientJiraAdapter" as JiraAdapter
+    }
 }
 
-database "Silver Copy DB\n<<PostgreSQL>>" as db
+database "Memory Bank\n<<MongoDB>>" as MemoryBank
+queue "CBUAE OpenFinance Events" as KafkaTopic
 
-req --> cmd : Routes parsed intent
-cmd --> saga : Initiates transaction
-saga --> db : Persists state
-saga --> outbox : Queues compensation/commit
+WSHandler --> Coordinator : Dispatches Chat Tasks
+KafkaListener --> Coordinator : Autonomous Ingestion
+Coordinator --> Economics : authorizeAndConsume(Tokens)
+Coordinator --> Harness : executeWithMemory(Session)
+Coordinator --> MemoryBank : Persists State
+Harness --> GithubAdapter : readPrdFromRepo
+Harness --> JiraAdapter : createJiraTicket
+
+KafkaTopic --> KafkaListener : Consumes webhook
+
 @enduml

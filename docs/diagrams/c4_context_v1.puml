@@ -7,24 +7,36 @@ skinparam rectangle {
     BorderColor #0b4884
 }
 
-actor "Third Party Provider" as TPP
-actor "AI Agent (e.g., Claude)" as AIAgent
+actor "Third Party Provider / Developer" as TPP
+actor "Business Analyst / HITL" as BA
 actor "Customer" as Customer
 
-package "Nebras Open Finance Platform" {
-    component "MCP Server" as MCP
-    component "API Gateway" as Gateway
-    component "Cognitive Layer" as Cognitive
-    component "Mediator Layer" as Mediator
-    component "Identity & Access" as IAM
-    component "Anti-Corruption Layer" as ACL
+package "CBUAE Open Finance Ecosystem" {
+    queue "CBUAE OpenFinance Events\n<<Kafka>>" as Kafka
 }
 
-component "Legacy Finacle/SOA" as Finacle
+package "OPF Agentive Platform" {
+    component "Developer Portal\n<<Next.js>>" as DevPortal
+    component "HITL Dashboard\n<<Next.js>>" as HitlDashboard
+    component "Agentive Backend Core\n<<Spring Boot + Temporal>>" as Core
+}
 
-TPP --> Gateway : SDK / API Calls
-AIAgent --> MCP : Tool Execution
-MCP --> Gateway : JSON Intent Payload
-Customer --> IAM : SCA Consent Approval
+package "External Enterprise Systems" {
+    component "GitHub" as GitHub
+    component "Atlassian Jira" as Jira
+    component "AWS Secrets Manager" as Vault
+    component "Legacy Finacle/SOA" as Finacle
+}
+
+TPP --> DevPortal : Integrates & Chats
+BA --> HitlDashboard : Uploads PRD & Approves
+DevPortal --> Core : WebSockets / REST
+HitlDashboard --> Core : WebSockets / REST
+Kafka --> Core : Pushes Webhooks (Autonomous Ingestion)
+Customer --> Core : SCA Consent Approval
+Core --> GitHub : Reads PRDs (WebClient)
+Core --> Jira : Creates Tickets (WebClient)
+Core --> Vault : Fetches Agent Identity Tokens
+Core --> Finacle : Executes Banking Saga
 
 @enduml

@@ -34,4 +34,9 @@ public class OpenFinanceWorkflowImpl implements OpenFinanceWorkflow {
         
         return results;
     }
+
+    @Override
+    public String fetchAccountsIntent(String userId) {
+        return "mocked-account-data-for-" + userId;
+    }
 }

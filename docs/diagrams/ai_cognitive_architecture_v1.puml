@@ -4,60 +4,44 @@ skinparam node {
     BorderColor #a2b4c6
 }
 
-actor "LLM / AI Agent" as Agent
+actor "Business Analyst / HITL" as hitl
 actor "TPP App" as App
 
-node "External Interface" {
-    [Nebras MCP Server] <<Tool Exposer>>
-    [API Gateway] <<DPoP Validator>>
+node "Presentation Layer" {
+    [Developer Portal (Next.js)] <<Frontend>>
+    [HITL Dashboard (Next.js)] <<Frontend>>
 }
 
-node "Agentive Platform (OpenShift)" {
+node "Agentive Platform (OpenShift ROSA)" {
     
-    component "Agent Gateway\n(Spring Cloud Gateway)" as gateway
+    component "WebSocket Bridge\n<<Spring Boot>>" as gateway
     
-    node "Harness Layer" {
-        component "Security LLM\n<<Streaming DLP>>" as dlp #lightcoral
-        component "Agent Scoper\n<<PII Hashing>>" as scoper #lightyellow
+    node "Cognitive Agent-FTE Layer" {
+        component "FTE Harness Coordinator\n<<Task Dispatcher>>" as harness
+        component "Agent-FTE Models\n<<Architecture, Compliance, etc>>" as agents
+        component "Skill Evolution Workflow\n<<Temporal>>" as skillEvo
+        component "Scrum Ceremonies Activities\n<<Temporal>>" as scrum
     }
     
-    node "Cognitive Layer" {
-        component "Harness Orchestrator\n<<Task Parser>>" as harness
-        component "Agent Execution\n<<Iterative Loop>>" as execLoop
-        component "Mixture of Experts Router" as router
-        database "Semantic Cache\n<<pgvector>>" as cache
-        component "Cognitive Circuit Breaker" as cb #orange
-        component "SLM (Fast Intent)" as slm #lightblue
-        component "LLM (Deep Reasoning)" as llm #lightblue
-        component "Temporal Workflow\n<<e.g. TPP Admission>>" as temp
+    node "Economics & Cost Layer" {
+        component "FteCostOptimizer\n<<Token Budgeting>>" as cost
     }
     
-    node "Memory Banks" {
-        database "Agent State DB" as memory
-    }
-    
-    node "Security Fabric" {
-        component "Istio Mesh" as istio
-        component "Hardware Kill Switch" as killswitch #red
+    node "Identity & Memory" {
+        component "MockCorporateIdpAdapter\n<<IAM Resolution>>" as idp
+        database "Agent Memory Banks\n<<Redis/Vector>>" as memory
     }
 }
 
-gateway --> dlp : Raw Request
-dlp --> scoper : Safe Request
-scoper --> harness : Hashed Request
-harness --> execLoop : Structured Tasks
-execLoop --> router : Task Iteration
-router <--> cache : Check Intent
-router --> cb : Route Request
-cb --> slm : Simple Task
-cb --> llm : Complex Task
-cb --> temp : Fallback (Rules Engine)
+hitl --> [HITL Dashboard (Next.js)] : Chat & PRD
+[HITL Dashboard (Next.js)] --> gateway : WebSocket (Virtual Threads)
+gateway --> harness : Dispatches Task (AgentFteRole)
 
-slm --> temp : Intent Execution
-llm --> temp : Intent Execution
-
-temp --> execLoop : Result/Signal
-execLoop --> memory : Update State
-killswitch ..> istio : Revokes SPIFFE ID
+harness --> agents : Maps to Specific Agent
+agents --> idp : Resolves Identity Profile & Vault Path
+agents --> skillEvo : Updates Skill Mastery (+86% TDD)
+agents --> scrum : Participates in Standups
+agents --> cost : Dedicts AI Token Budgets
+agents --> memory : Stores Conversation State
 
 @enduml
