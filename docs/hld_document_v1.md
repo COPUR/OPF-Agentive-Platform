@@ -18,7 +18,8 @@ Instead of hardcoded APIs, core flows are represented by dynamic **Agent Workflo
 - **Autonomous Event Ingestion**: `AgentIngestionKafkaListener` continuously polls OpenFinance webhooks and delegates them strictly to the `AUTONOMOUS_INGESTION` Agent-FTE role, completely bypassing synchronous REST flows.
 
 ## 3. High-Level Components
-- **AI Gateway & API Gateway (Spring Cloud Gateway):** Secures all incoming developer traffic, enforces Token Validation (Auth/Authz) for Agents, asserts Consent Management bounds, and maintains streaming chat connections.
+- **API Gateway (Spring Cloud Gateway):** Secures incoming REST developer traffic and maintains streaming chat connections.
+- **Standalone AI Gateway:** A dedicated microservice providing token validation (Auth/Authz) and Consent Management bounding exclusively for AI agents and Cognitive traffic.
 - **Cognitive Layer (Temporal):** Orchestrates AI intent mapping.
 - **Mediator (CQRS/Saga):** Enforces distributed transaction state.
 - **Legacy Systems:** Finacle & FinOne core integration via ACL.
