@@ -1,0 +1,32 @@
+_format_version: "3.0"
+_transform: true
+
+services:
+  - name: ai-cognitive-layer
+    url: http://temporal:7233
+    routes:
+      - name: autonomous-intent-route
+        paths:
+          - /ai-intent
+    plugins:
+      # Mock configuration for AI Gateway Guardrails
+      - name: ai-prompt-guard
+        config:
+          allow_patterns:
+            - "^(GET|POST|PUT|DELETE)"
+            - ".*openfinance.*"
+          deny_patterns:
+            - ".*system prompt.*"
+            - ".*ignore previous instructions.*"
+            - ".*password.*"
+      # Mock Configuration for Agent Authentication/Authorization
+      - name: key-auth
+        config:
+          key_names:
+            - apikey
+            - x-api-key
+      # Token Economics / Rate Limiting Mock
+      - name: rate-limiting
+        config:
+          minute: 100
+          policy: local
